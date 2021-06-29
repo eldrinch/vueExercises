@@ -1,0 +1,285 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue.js</title>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      .text-class-1 {
+        font-style: italic;
+      }
+      .text-class-2 {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hello-world">
+      <fieldset>
+        <legend>template</legend>
+        <div v-html="htmlContent"></div>
+        <p>Nome: {{firstName}}</p>
+        <p>Sobrenome: {{lastName}}</p>
+        <p>Idade: {{age}}</p>
+        <p>{{age >=18 ? "maior de idade": "menor de idade"}}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>methods</legend>
+        <button v-on:click="incrementAge">Incrementar idade</button>
+        <button @click="decrementAge">Decrentar Idade</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>computed properties</legend>
+        <!-- <p>Nome Completo:{{firstName}} {{lastName}}</p> -->
+        <p>Nome Completo:{{fullName}}</p>
+        <!--<p>Nome Completo:{{fullName}}</p>
+        <p>Nome Completo:{{fullName}}</p>-->
+
+        <p>Nome Completo:{{getFullName()}}</p>
+        <!--<p>Nome Completo:{{getFullName()}}</p>
+        <p>Nome Completo:{{getFullName()}}</p>-->
+      </fieldset>
+
+      <fieldset>
+        <legend>watchers</legend>
+        <label for="input-address">Endereço: </label>
+        <input id="input-address" type="text" v-model="address" />
+      </fieldset>
+
+      <fieldset>
+        <legend>v-if</legend>
+        <label for="input-grade">Nota: </label>
+        <input id="#input-grade" type="text" v-model="grade" />
+        <p v-if="grade < 60">Reprovado</p>
+        <p v-else-if="grade >= 60 && grade < 98">Aprovado</p>
+        <p v-else-if="grade > 98">Aprovado com Excelência</p>
+        <p v-else>Aprovado</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-show</legend>
+        <button v-show="!isUserLogged" @click="isUserLogged = true">Login</button>
+        <button v-show="isUserLogged" @click="isUserLogged = false">Logout</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-text</legend>
+        <p>{{firstName}}</p>
+        <p v-text="firstName"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-html</legend>
+        <div v-html="htmlContent"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-once</legend>
+        <p v-once>{{count}}</p>
+        <p>{{count}}</p>
+        <button @click="count++">Adicionar</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-for</legend>
+        <h4>Marcas</h4>
+        <ul>
+          <li v-for="brand in carBrands">{{brand}}</li>
+        </ul>
+
+        <h4>Carros</h4>
+        <ul>
+          <li v-for="car in cars">{{car.name}} ({{car.brand}})</li>
+        </ul>
+
+        <h4>Carro</h4>
+        <p v-for="(value, key, index) in car">{{index}} - {{key}} - {{value}}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-bind</legend>
+        <!-- <a v-bind:href="urlIgti">IGTI</a><br /> -->
+        <a :href="urlIgti">IGTI</a><br />
+        <a :href="urlIgti" v-bind:[argument]:title="urlIgtiDescription">IGTI</a>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-model</legend>
+        <label for="input-firstName">Primeiro Nome: </label>
+        <input id="input-firstName" type="text" v-model="firstName" />
+        <br />
+        <label for="textarea-html">HTML: </label>
+        <textarea id="textarea-html" v-model="htmlContent"></textarea>
+        <br />
+        <input type="checkbox" id="checkbox" v-model="checked" />
+        <label for="checkbox">{{checked}}</label>
+        <br />
+
+        <input type="radio" id="one" value="Um" v-model="selectedOption" />
+        <label for="one">Um</label>
+        <br />
+        <input type="radio" id="two" value="Dois" v-model="selectedOption" />
+        <label for="two">Dois</label>
+        <br />
+        <p>Opção Escolhida: {{selectedOption}}</p>
+        <br />
+        <select v-model="selectecCar">
+          <option v-for="car in cars" v-bind:value="car">{{car.name}} - {{car.brand}}</option>
+        </select>
+        <p>Carro Escolhido: {{selectecCar.name}} - {{selectecCar.brand}}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-pre</legend>
+        <p>{{firstName}}</p>
+        <p v-pre>{{firstName}}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>v-cloak</legend>
+        <p>{{firstName}}</p>
+        <p v-cloak>{{firstName}}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>eventos</legend>
+        <div>
+          <button v-on:click="eventTest('click')">On Click</button>
+          <button v-on:click="eventTest">On Click Event Param Implicit</button>
+          <button @click="eventTestParam('@click', $event)">On Click Event Param Explicit</button>
+          <button @dblclick="eventTest('dbl click')">On Double Click</button>
+          <button @click.left="eventMouseTest">Mouse Left</button>
+          <button @click.right.prevent="eventMouseTest">Mouse Right</button>
+          <button @click.middle="eventMouseTest">Mouse Middle</button>
+          <p @mouseenter="eventMouseTest" @mouseleave="eventMouseTest">Mouse over test</p>
+        </div>
+
+        <div>
+          <a :href="urlIgti" v-bind:[argument]="urlIgtiDescription" @click.prevent="showAlert('blocked')">IGTI</a>
+          <br />
+          <a :href="urlIgti" v-bind:[argument]="urlIgtiDescription" @click.prevent.once="showAlert('blocked')">IGTI</a>
+        </div>
+        <div>
+          <input v-on:keyup.enter="eventKeyTest" placeholder="Press Enter" />
+          <input @keydown.enter="eventKeyTest" placeholder="Press Enter" />
+          <input @keydown.delete="eventKeyTest" placeholder="Press Delete" />
+          <input @keydown.esc="eventKeyTest" placeholder="Press Esc" />
+          <input @keydown.space="eventKeyTest" placeholder="Press Space" />
+          <input @keydown.up="eventKeyTest" placeholder="Press Up " />
+          <input @keydown.down="eventKeyTest" placeholder="Press Down" />
+          <input @keydown.left="eventKeyTest" placeholder="Press Left" />
+          <input @keydown.right="eventKeyTest" placeholder="Press Right" />
+          <input @keydown.tab="eventKeyTest" placeholder="Press tab" />
+          <input @keydown.ctrl="eventKeyTest" placeholder="Press Ctrl" />
+          <!-- <input @keydown.alt="eventKeyTest" placeholder="Press Alt" /> -->
+          <input @keydown.shift="eventKeyTest" placeholder="Press Shift" />
+          <input @keydown.meta="eventKeyTest" placeholder="Press Meta" />
+        </div>
+
+        <p @click.ctrl="eventTest('ctrl + click')">Ctrl + Click</p>
+        <p @click.ctrl.exact="eventTest('ctrl + click(exact)')">Ctrl + Click Exact</p>
+        <p @click.ctrl="eventTest('ctrl + click(exact)')" @click.alt="eventTest('alt + click')">Ctrl + Click / Alt + Click</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>estilos</legend>
+        <p v-bind:style="{ color:textColor }">inline style object</p>
+        <p :style="textColorObject">inline style object bind</p>
+        <p class="text-class-1" :class="classText2">Class bind</p>
+        <p :class="classList">class bind list</p>
+        <p :class="[classText1,classText2]">class list inline</p>
+        <p :class="[1 < 0 ? classList : classList]">Class expression</p>
+        <p :class="1 > 2? 'text-class-1' : 'text-class-2'">Class expression</p>
+      </fieldset>
+    </div>
+
+    <script src="https://unpkg.com/vue@3.0.4"></script>
+
+    <script>
+      const app = {
+        data() {
+          return {
+            htmlContent: "<p style='color:red; font-size:20px'>Hello Worls Vue.js</p>",
+            firstName: "Eldrin",
+            lastName: "Cordova",
+            age: 46,
+            address: "",
+            grade: 0,
+            isUserLogged: false,
+            count: 1,
+            carBrands: ["VW", "Fiat", "Renault", "Ford"],
+            cars: [
+              { name: "ka", brand: "Ford" },
+              { name: "Palio", brand: "Fiat" },
+              { name: "Sandero", brand: "Renault" },
+            ],
+
+            car: { name: "ka", brand: "Ford", year: 2010, km: 60000 },
+            urlIgti: "https://www.igti.com.br",
+            urlIgtiDescription: "Clique aqui para accessar o site do IGTI",
+            argument: "title",
+            checked: false,
+            selectedOption: "",
+            selectecCar: "",
+            textColor: "red",
+            textColorObject: {
+              color: "green",
+              fontSize: "25px",
+            },
+            classText1: "text-class-1",
+            classText2: "text-class-2",
+            classList: ["text-class-1", "text-class-2"],
+          };
+        },
+        methods: {
+          //incrementAge() {} === incrementAge: function() {}
+          incrementAge() {
+            this.age++;
+          },
+          decrementAge() {
+            this.age--;
+          },
+          getFullName() {
+            //console.log("fullName Method");
+            return `${this.firstName} ${this.lastName}`;
+          },
+          eventTest(name) {
+            console.log(name);
+          },
+          eventTestParam(name, event) {
+            console.log(name);
+            console.log(event);
+          },
+          eventMouseTest(event) {
+            console.log(event.type);
+          },
+          eventKeyTest(event) {
+            console.log(event.key, event.type);
+          },
+          showAlert(msg) {
+            alert(msg);
+          },
+        },
+        computed: {
+          fullName: function () {
+            //console.log("fullName Computed Property");
+            return `${this.firstName} ${this.lastName}`;
+          },
+        },
+        watch: {
+          address: function (newValue, oldValue) {
+            console.log(newValue);
+            console.log(oldValue);
+          },
+        },
+      };
+
+      const vm = Vue.createApp(app).mount("#hello-world");
+    </script>
+  </body>
+</html>
